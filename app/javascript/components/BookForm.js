@@ -2,28 +2,35 @@ import React, { useState } from 'react'
 import axios from 'axios'
 
 const BookForm = (props) =>{
-  const{addBook} = props
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [genre, setGenre] = useState('')
-  const [neats, setNeats] = useState('')
+  const{addBook, id, updateBook} = props
+  const [title, setTitle] = useState(props.title ? props.title: '')
+  const [author, setAuthor] = useState(props.author ? props.author:'')
+  const [genre, setGenre] = useState(props.genre ? props.genre: '')
+  const [neats, setNeats] = useState(props.neats ? props.neats: '')
 
   const handleSubmit = async (e) =>{
+
     e.preventDefault()
     console.log({title, author, genre, neats})
     const book = {title, author, genre, neats}
+
+    }
+    if(id){ 
+      let response = await axios.put(`/books/${id}`, book)
+      updateBook(response.data)
+    }else{
     let response = await axios.post('/books', book)
-    console.log(response)
-    addBook(response.data)
-    setTitle('')
-    setAuthor('')
-    setGenre('')
-    setNeats('')
+      addBook(response.data)
+    }
+      setTitle('')
+      setAuthor('')
+      setGenre('')
+      setNeats('')
 
   }
   return(
     <div>
-      <h1>add book</h1>
+      <h1>{id ? "Edit": "New"}</h1>
       <form onSubmit={handleSubmit}>
         <p>title</p>
         <input value={title} onChange={((e)=>setTitle(e.target.value))}/>
@@ -33,7 +40,7 @@ const BookForm = (props) =>{
         <input value={genre} onChange={((e)=>setGenre(e.target.value))}/>
         <p>neats</p>
         <input value={neats} onChange={((e)=>setNeats(e.target.value))}/>
-        <button>add</button>
+        <button>{id ? "Update": "Add"}</button>
         
       </form>
 

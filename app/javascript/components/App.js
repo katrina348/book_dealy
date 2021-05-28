@@ -6,7 +6,7 @@ import BookForm from './BookForm';
 
 const App = (props) => {
   const [books, setBooks] = useState([])
-  const [showForm, setShowForm] = useState(true)
+  const [showForm, setShowForm] = useState(false)
 
   const getBooks = async () =>{
     let response = await axios.get('/books')
@@ -15,11 +15,21 @@ const App = (props) => {
   }
 
   const addBook = (book) => {
-
     let updateBooks = [book, ...books]
     setBooks(updateBooks)
   }
 
+  const updateBook = (updateBook) => {
+    let updateBooks = books.map(book =>{
+      if(book.id !== updateBook.id){
+        return book
+      } else {
+        return updateBook
+      }
+    })
+    setBooks(updateBooks)
+  }
+  
   return (
     <div>
       <h1>App.js Page</h1>
@@ -28,7 +38,7 @@ const App = (props) => {
       {showForm && <BookForm addBook={addBook}/>}
 
 
-      <Books bookz ={books} />
+      <Books bookz ={books} updateBook={updateBook} />
     </div>
   )
   
