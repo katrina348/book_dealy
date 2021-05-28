@@ -11,13 +11,7 @@ const Books = (props) =>{
     }
     return bookz.map( book =>{
       return<Book key={book.id} {...book}/>
-      // return <Book 
-      // key={book.id}
-      // title={book.title} 
-      // author={book.author}
-      // genre={book.genre}
-      // neats={book.neats}
-    //  />
+    
     })
   }
   return (
