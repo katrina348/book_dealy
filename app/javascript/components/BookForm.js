@@ -11,26 +11,31 @@ const BookForm = (props) =>{
   const handleSubmit = async (e) =>{
 
     e.preventDefault()
+    setErrorMesssage(null)
     console.log({title, author, genre, neats})
     const book = {title, author, genre, neats}
-
-    }
-    if(id){ 
-      let response = await axios.put(`/books/${id}`, book)
-      updateBook(response.data)
-    }else{
-    let response = await axios.post('/books', book)
-      addBook(response.data)
-    }
+    
+    try {
+      if(id){
+          let response = await axios.put(`/books/${id}`, book)
+          updateBook(response.data)
+      } else{
+        let response = await axios.post('/books', book)
+        addBook(response.data)
+      }
       setTitle('')
       setAuthor('')
       setGenre('')
       setNeats('')
-
+    } catch (err) {
+        console.log(err.response.data)
+        setErrorMessage(err.response.data.join(','))
+    }
   }
   return(
     <div>
       <h1>{id ? "Edit": "New"}</h1>
+      {errorMessage && <p style={{color:'red'}}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <p>title</p>
         <input value={title} onChange={((e)=>setTitle(e.target.value))}/>
@@ -45,7 +50,5 @@ const BookForm = (props) =>{
       </form>
 
     </div>
-  )
-}
-
+  )}
 export default BookForm

@@ -1,7 +1,7 @@
 class BooksController < ApplicationController
   
   def app
-    render component: "App"
+    render component: "app"
   end
 
   def index
@@ -9,15 +9,6 @@ class BooksController < ApplicationController
     render json: @books
   end
 
-  def update
-    @book = Book.find(params[:id])
-    if(@book.update(book_params))
-      render json: @book
-    else
-      render json: @book.errors.full_messages, status: :unprocessable_entity
-
-    end
-  end
   def create
     @book = Book.new(book_params)
     if(@book.save)
@@ -27,14 +18,22 @@ class BooksController < ApplicationController
     end
   end
 
+  def update
+    @book = Book.find(params[:id])
+    if(@book.update(book_params))
+      render json: @book
+    else
+      render json: @book.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    render json: @book.destroy
+  end
+  
   private
 
   def book_params
     params.require(:book).permit(:title, :author, :genre, :neats)
   end
-
-
-
-
-
 end
